@@ -6,7 +6,7 @@ mongoose.set('useCreateIndex', true)
 // 创建连接
 mongoose.connect(config.DB_URL, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: true
 })
 
 // 连接成功

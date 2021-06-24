@@ -2,7 +2,6 @@ import svgCaptcha from 'svg-captcha'
 import { setValue } from '@/config/RedisConfig'
 
 class PublicController {
-  constructor() {}
   async getCaptcha (ctx) {
     const body = ctx.request.query
     const newCaptcha = svgCaptcha.create({
@@ -20,7 +19,7 @@ class PublicController {
     setValue(body.sid, newCaptcha.text, 10 * 60)
     ctx.body = {
       code: 200,
-      data: newCaptcha.data,
+      data: newCaptcha.data
     }
   }
 }

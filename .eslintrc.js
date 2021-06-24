@@ -2,15 +2,15 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true,
+    node: true
   },
-  extends: 'eslint:recommended',
+  extends: ['eslint:recommended', 'standard'],
   parserOptions: {
     ecmaVersion: 12,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-  },
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+  }
 }

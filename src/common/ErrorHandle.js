@@ -1,7 +1,7 @@
 export default (ctx, next) => {
   return next().catch((err) => {
-    if (401 == err.status) {
-      ctx.status = 401;
+    if (err.status === 401) {
+      ctx.status = 401
       ctx.body = {
         code: 401,
         msg: 'Protected resource, use Authorization header to get access\n'
@@ -11,7 +11,7 @@ export default (ctx, next) => {
       ctx.body = Object.assign(
         {
           code: 500,
-          msg: err.message,
+          msg: err.message
         },
         process.env.NODE_ENV === 'development' ? { stack: err.stack } : {}
       )

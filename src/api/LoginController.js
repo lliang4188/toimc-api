@@ -7,13 +7,12 @@ import { checkCode } from '@/common/Utils'
 import User from '@/model/User'
 
 class LoginController {
-  constructor() { }
   async forget (ctx) {
     const { body } = ctx.request
     console.log(body)
     try {
       // body.username -> database -> email
-      let result = await send({
+      const result = await send({
         code: '1234',
         expire: moment().add(30, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
         email: body.username,
@@ -33,14 +32,14 @@ class LoginController {
     // 接收用户数据
     // 返回token
     const { body } = ctx.request
-    let sid = body.sid
-    let code = body.code
+    const sid = body.sid
+    const code = body.code
     // 验证图片验证码的时效性、正确性
-    let result = await checkCode(sid, code)
+    const result = await checkCode(sid, code)
     if (result) {
       // 验证用户名密码是否正确
       let checkUserPasswrod = false
-      let user = await User.findOne({ username: body.username })
+      const user = await User.findOne({ username: body.username })
       if (await bcrypt.compare(body.password, user.password)) {
         checkUserPasswrod = true
       }
@@ -48,25 +47,25 @@ class LoginController {
       if (checkUserPasswrod) {
         // 通过验证，返回token数据
         console.log('hello login')
-        let token = jsonwebtoken.sign({ _id: 'Brian' }, config.JWT_SECRET, {
-          expiresIn: '1d',
+        const token = jsonwebtoken.sign({ _id: 'Brian' }, config.JWT_SECRET, {
+          expiresIn: '1d'
         })
         ctx.body = {
           code: 200,
-          token: token,
+          token: token
         }
       } else {
         // 用户名 密码验证失败，返回提示
         ctx.body = {
           code: 404,
-          msg: '用户名密码错误',
+          msg: '用户名密码错误'
         }
       }
     } else {
       // 图片验证码校验失败
       ctx.body = {
         code: 401,
-        msg: '图形验证码不正确，请检查',
+        msg: '图形验证码不正确，请检查'
       }
     }
   }
@@ -75,9 +74,9 @@ class LoginController {
     // 接收客户端数据
     const { body } = ctx.request
     // 校验验证码的时效性、正确性
-    let sid = body.sid
-    let code = body.code
-    let msg = {}
+    const sid = body.sid
+    const code = body.code
+    const msg = {}
     // 验证图片验证码的时效性、正确性
     const result = await checkCode(sid, code)
     let check = true
@@ -97,7 +96,7 @@ class LoginController {
       // 写入数据到数据库
       if (check) {
         body.password = await bcrypt.hash(body.password, 5)
-        let user = new User({
+        const user = new User({
           username: body.username,
           name: body.name,
           password: body.password,
@@ -113,11 +112,11 @@ class LoginController {
       }
     } else {
       // veevalidate 显示的错误
-      msg.code= ['验证码已失效，请重新获取！']
+      msg.code = ['验证码已失效，请重新获取！']
     }
     ctx.body = {
       code: 500,
-      msg: msg,
+      msg: msg
     }
   }
 }
