@@ -19,6 +19,7 @@
     "@koa/cors": "^3.0.0",
     "bcrypt": "^5.0.1",
     "bluebird": "^3.7.2",
+    "dayjs": "^1.10.5",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-body": "^4.1.0",
@@ -30,11 +31,12 @@
     "koa-jwt": "^4.0.1",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
-    "moment": "^2.29.1",
+    "make-dir": "^3.1.0",
     "mongoose": "^5.12.14",
     "nodemailer": "^6.6.2",
     "redis": "^3.1.2",
-    "svg-captcha": "^1.4.0"
+    "svg-captcha": "^1.4.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
