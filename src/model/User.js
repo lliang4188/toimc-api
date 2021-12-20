@@ -1,4 +1,4 @@
-import mongoose from '../config/DBHelpler'
+import mongoose from '@/config/DBHelpler'
 import moment from 'dayjs'
 const Schema = mongoose.Schema
 
@@ -8,7 +8,7 @@ const UserSchema = new Schema({
   name: { type: String },
   created: { type: Date },
   updated: { type: Date },
-  favs: { type: Number },
+  favs: { type: Number, default: 100 },
   gender: { type: String, default: '' },
   roles: { type: Array, default: ['user'] },
   pic: { type: String, default: '/img/head.jpeg' },
@@ -45,6 +45,55 @@ UserSchema.statics = {
       username: 0,
       mobile: 0
     })
+  },
+  getList: function (options, sort, page, limit) {
+    // 1.date -> item: string, search-> array startime, endtime
+    // 2. radio -> key-value $in
+    // 3. select -> key-array $in
+    let query = {}
+    if (typeof options.search !== 'undefined') {
+      if (typeof options.search === 'string' && options.search.trim() !== '') {
+        if (['name', 'username'].includes(options.item)) {
+          // 模糊匹配
+          query[options.item] = { $regex: new RegExp(options.search) }
+          // =》 { name: { $regex: /admin/ } } => mysql like %admin%
+        } else {
+          // radio
+          query[options.item] = options.search
+        }
+      }
+      if (options.item === 'roles') {
+        query = { roles: { $in: options.search } }
+      }
+      if (options.item === 'created') {
+        if (options.search[0] && options.search[1]) {
+          const start = options.search[0]
+          const end = options.search[1]
+          query = { created: { $gte: new Date(start), $lte: new Date(end) } }
+        }
+      }
+    }
+    return this.find(query, {
+      password: 0,
+      mobile: 0
+    })
+      .sort({ [sort]: -1 })
+      .skip(page * limit)
+      .limit(limit)
+  },
+  countList: function (options) {
+    return this.find(options).countDocuments()
+  },
+  geTotalSign: function (page, limit) {
+    return this.find({
+      count: { $gt: 0 }
+    })
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ count: -1 })
+  },
+  geTotalSignCount: function (page, limit) {
+    return this.find({ count: { $gt: 0 } }).countDocuments()
   }
 }
 

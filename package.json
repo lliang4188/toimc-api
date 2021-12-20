@@ -4,52 +4,57 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/index.js",
     "webpack:debug": "node --inspect-brk ./node_modules/webpack/bin/webpack.js --inline --progress",
     "build": "cross-env NODE_ENV=prod webpack --config config/webpack.config.prod.js",
-    "dev": "npm-run-all -p watch debug",
+    "start": "npm-run-all -p watch debug",
     "clean": "rimraf dist",
     "watch": "cross-env NODE_ENV=dev webpack --watch --progress --hide-modules --config config/webpack.config.dev.js",
-    "debug": "nodemon --inspect ./dist/server.bundle.js"
+    "debug": "nodemon --inspect=9299 ./dist/server.bundle.js"
   },
   "keywords": [],
   "author": "brian@toimc.com",
   "license": "ISC",
   "dependencies": {
-    "@koa/cors": "^3.0.0",
-    "bcrypt": "^5.0.1",
+    "@koa/cors": "^3.1.0",
+    "bcrypt": "^3.0.7",
     "bluebird": "^3.7.2",
     "dayjs": "^1.10.5",
     "jsonwebtoken": "^8.5.1",
-    "koa": "^2.7.0",
-    "koa-body": "^4.1.0",
+    "koa": "^2.13.1",
+    "koa-body": "^4.2.0",
     "koa-combine-routers": "^4.0.2",
     "koa-compose": "^4.1.0",
     "koa-compress": "^3.0.0",
     "koa-helmet": "^4.2.0",
     "koa-json": "^2.0.2",
     "koa-jwt": "^4.0.1",
+    "koa-log4": "^2.3.2",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "make-dir": "^3.1.0",
-    "mongoose": "^5.12.14",
+    "mongoose": "^5.13.2",
     "nodemailer": "^6.6.2",
+    "qs": "^6.10.1",
     "redis": "^3.1.2",
     "svg-captcha": "^1.4.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "ws": "^7.5.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/node": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "babel-loader": "^8.0.6",
+    "@babel/core": "^7.14.6",
+    "@babel/node": "^7.14.7",
+    "@babel/preset-env": "^7.14.7",
+    "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^3.0.0",
     "cross-env": "^5.2.0",
-    "eslint": "^7.29.0",
+    "eslint": "^7.30.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.8",
     "nodemon": "^1.19.1",
     "npm-run-all": "^4.1.5",
     "rimraf": "^2.6.3",
@@ -58,5 +63,15 @@
     "webpack-cli": "^3.3.6",
     "webpack-merge": "^4.2.1",
     "webpack-node-externals": "^1.7.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "npm run lint"
+    ]
   }
 }

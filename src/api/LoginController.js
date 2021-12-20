@@ -66,13 +66,20 @@ class LoginController {
       // 验证用户名密码是否正确
       let checkUserPasswrod = false
       const user = await User.findOne({ username: body.username })
+      if (user === null) {
+        ctx.body = {
+          code: 404,
+          msg: '用户名或者密码错误'
+        }
+        return
+      }
       if (await bcrypt.compare(body.password, user.password)) {
         checkUserPasswrod = true
       }
       // mongDB查库
       if (checkUserPasswrod) {
         const userObj = user.toJSON()
-        const arr = ['password', 'username', 'roles']
+        const arr = ['password', 'username']
 
         arr.map((item) => {
           return delete userObj[item]
