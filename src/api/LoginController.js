@@ -143,7 +143,7 @@ class LoginController {
       // 查库，看 name 是否被注册
       const user2 = await User.findOne({ name: body.name })
       if (user2 !== null && typeof user2.name !== 'undefined') {
-        msg.name = ['此昵称已注册，请修改']
+        msg.name = '此昵称已注册，请修改'
         check = false
       }
       // 写入数据到数据库
@@ -165,7 +165,7 @@ class LoginController {
       }
     } else {
       // veevalidate 显示的错误
-      msg.code = ['验证码已失效，请重新获取！']
+      msg.code = '验证码已失效，请重新获取！'
     }
     ctx.body = {
       code: 500,
@@ -189,7 +189,7 @@ class LoginController {
       return
     }
     if (!result) {
-      msg.code = ['验证码已失效，请重新获取']
+      msg.code = '验证码已失效，请重新获取'
       ctx.body = {
         code: 500,
         msg: msg

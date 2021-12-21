@@ -16,10 +16,19 @@ const baseUrl =
 
 const uploadPath = process.env.NODE_ENV === 'production' ? 'app/public' : path.join(path.resolve(__dirname), '../../public')
 
+const publicPath = [
+  /^\/public/,
+  /^\/login/,
+  /^\/content/,
+  /^\/user/,
+  /^\/comments/
+]
+
 export default {
   DB_URL,
   REDIS,
   JWT_SECRET,
   baseUrl,
-  uploadPath
+  uploadPath,
+  publicPath
 }
