@@ -1,13 +1,13 @@
-import send from '../config/MailConfig'
+import { checkCode, generateToken } from '@/common/Utils'
+import { getValue, setValue } from '@/config/RedisConfig'
+import SignRecord from '@/model/SingRecord'
+import User from '@/model/User'
 import bcrypt from 'bcrypt'
 import moment from 'dayjs'
 import jsonwebtoken from 'jsonwebtoken'
-import config from '../config'
-import { checkCode } from '@/common/Utils'
-import User from '@/model/User'
-import SignRecord from '@/model/SingRecord'
-import { getValue, setValue } from '@/config/RedisConfig'
 import { v4 as uuidv4 } from 'uuid'
+import config from '../config'
+import send from '../config/MailConfig'
 
 class LoginController {
   // 忘记密码发送邮件
@@ -85,9 +85,9 @@ class LoginController {
           return delete userObj[item]
         })
         // 通过验证，返回token数据
-        const token = jsonwebtoken.sign({ _id: userObj._id }, config.JWT_SECRET, {
-          expiresIn: '1d'
-        })
+        // const token = jsonwebtoken.sign({ _id: userObj._id }, config.JWT_SECRET, {
+        //   expiresIn: '1d'
+        // })
         // 加入isSing 属性
         const signRecord = await SignRecord.findByUid(userObj._id)
         if (signRecord !== null) {
@@ -104,7 +104,8 @@ class LoginController {
         ctx.body = {
           code: 200,
           data: userObj,
-          token: token
+          token: generateToken({ _id: userObj._id }, '60m'),
+          refreshToken: generateToken({ _id: userObj._id }, '7d')
         }
       } else {
         // 用户名 密码验证失败，返回提示
@@ -119,6 +120,15 @@ class LoginController {
         code: 401,
         msg: '图形验证码不正确，请检查'
       }
+    }
+  }
+
+  // refreshToken
+  async refresh (ctx) {
+    ctx.body = {
+      code: 200,
+      token: generateToken({ _id: ctx._id }),
+      msg: '获取token成功'
     }
   }
 

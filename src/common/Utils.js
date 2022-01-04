@@ -1,11 +1,21 @@
-import { getValue } from '@/config/RedisConfig'
 import config from '@/config/index'
-import jwt from 'jsonwebtoken'
+import { getValue } from '@/config/RedisConfig'
 import fs from 'fs'
+import jwt from 'jsonwebtoken'
 import path from 'path'
 
 const getJWTPayload = token => {
   return jwt.verify(token.split(' ')[1], config.JWT_SECRET)
+}
+
+const generateToken = (payload, expire = '1h') => {
+  if (payload) {
+    return jwt.sign({
+      ...payload
+    }, config.JWT_SECRET, { expiresIn: expire })
+  } else {
+    throw new Error('生成token失败！')
+  }
 }
 
 const checkCode = async (key, value) => {
@@ -136,6 +146,7 @@ const getRights = (tree, menus) => {
 }
 
 export {
+  generateToken,
   checkCode,
   getJWTPayload,
   dirExists,
