@@ -1,12 +1,12 @@
-import qs from 'qs'
+import { getMenuData, getRights } from '@/common/Utils'
+import Comments from '@/model/Comments'
 import Menu from '@/model/Menus'
-import Roles from '@/model/Roles'
 import Post from '@/model/Post'
+import Roles from '@/model/Roles'
+import SignRecord from '@/model/SingRecord'
 import User from '@/model/User'
 import moment from 'dayjs'
-import Comments from '@/model/Comments'
-import SignRecord from '@/model/SingRecord'
-import { getMenuData, getRights } from '@/common/Utils'
+import qs from 'qs'
 const weekday = require('dayjs/plugin/weekday')
 moment.extend(weekday)
 class AdminController {
@@ -129,7 +129,8 @@ class AdminController {
       options = params.options
     }
     const page = params.page ? parseInt(params.page) : 0
-    const limit = params.limit ? parent(params.limit) : 20
+    const limit = params.limit ? parseInt(params.limit) : 20
+
     // 使用MongoDB中的视图，效率提升1倍
     // const test = await CommentsUsers.find({ 'uid.name': { $regex: 'admin1', $options: 'i' } })
     const result = await Comments.getCommentsOptions(options, page, limit)
@@ -145,6 +146,39 @@ class AdminController {
       code: 200,
       data: result,
       total
+    }
+  }
+
+  async updateComment (ctx) {
+    const { body } = ctx.request
+    const data = { ...body }
+    delete data._id
+    const result = await Comments.updateOne({ _id: body._id }, { ...data })
+    ctx.body = {
+      code: 200,
+      data: result
+    }
+  }
+
+  async upadteCommentsBatch (ctx) {
+    const { body } = ctx.request
+    const result = await Comments.updateMany(
+      { _id: { $in: body.ids } },
+      { $set: { ...body.settings } }
+    )
+    ctx.body = {
+      code: 200,
+      data: result
+    }
+  }
+
+  async deleteCommentsBatch (ctx) {
+    const { body } = ctx.request
+    const result = await Comments.deleteMany({ _id: { $in: body.ids } })
+    ctx.body = {
+      code: 200,
+      data: result,
+      msg: '删除成功'
     }
   }
 

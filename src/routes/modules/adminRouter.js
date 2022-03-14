@@ -1,8 +1,8 @@
-import Router from 'koa-router'
-import contentController from '@/api/ContentController'
-import userController from '@/api/UserController'
 import adminController from '@/api/AdminController'
+import contentController from '@/api/ContentController'
 import errorController from '@/api/ErrorController'
+import userController from '@/api/UserController'
+import Router from 'koa-router'
 
 const router = new Router()
 
@@ -82,6 +82,14 @@ router.post('/delete-error', errorController.deleteError)
 
 // router.get('/get-operations', adminController.getOperations)
 // 获取评论信息
-// router.get('/getComments', adminController.getCommentsAll)
+router.get('/getComments', adminController.getCommentsAll)
+
+// 更新评论
+router.post('/updateCommentsId', adminController.updateComment)
+// 批量更新评论
+router.post('/updateComments', adminController.upadteCommentsBatch)
+
+// 删除评论信息
+router.post('/deleteComments', adminController.deleteCommentsBatch)
 
 export default router

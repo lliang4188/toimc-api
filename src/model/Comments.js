@@ -97,26 +97,6 @@ CommentsSchema.statics = {
         // radio
         query[options.item] = options.search
       }
-
-      /**
-       * 创建视图：
-       * db.createView('comments_users', 'comments', [
-          { '$lookup': {
-              from: 'posts', let: { pid: { '$toObjectId': '$tid' } },
-              pipeline: [ { '$match': { '$expr': { '$eq': [ '$_id', '$$pid' ] } } },
-              { '$project': { _id: 1, uid: 1, title: 1 } } ], as: 'tid' } },
-              { '$replaceRoot': { newRoot: { '$mergeObjects': [ { '$arrayElemAt': [ '$tid', 0 ] }, '$$ROOT' ] } } },
-              { '$unwind': '$tid' },
-              { '$addFields': { userId: { '$toObjectId': '$uid' } } },
-              { '$lookup': {
-                  from: 'users', localField: 'userId', foreignField: '_id', as: 'uid' } },
-              { '$unwind': '$uid' }, { '$addFields': { fuserId: { '$toObjectId': '$cuid' } } },
-              { '$lookup': { from: 'users', localField: 'fuserId', foreignField: '_id', as: 'cuid' } },
-              { '$unwind': '$cuid' },
-          { '$project': { tid: 1, cuid: { name: 1, _id: 1 }, uid: { name: 1, _id: 1 }, isBest: 1, status: 1, content: 1, created: 1 } },
-          { '$sort': { created: -1 } }],
-          {})
-       */
       if (['uid', 'tid', 'cuid'].includes(options.item)) {
         let arr = [
           {
