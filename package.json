@@ -8,6 +8,7 @@
     "build": "cross-env NODE_ENV=prod webpack --config config/webpack.config.prod.js",
     "start": "npm-run-all -p watch debug",
     "clean": "rimraf dist",
+    "lint": "eslint src/ --ext .js --fix",
     "watch": "cross-env NODE_ENV=dev webpack --watch --progress --hide-modules --config config/webpack.config.dev.js",
     "debug": "nodemon --inspect=9299 ./dist/server.bundle.js"
   },
